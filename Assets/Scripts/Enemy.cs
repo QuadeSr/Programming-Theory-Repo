@@ -5,18 +5,14 @@ using UnityEngine;
 // INHERITENCE
 public class Enemy : Unit
 {
-    private bool isFleeing = false;
-
-    private Rigidbody rb;
-    private GameObject player;
-    PlayerController playerController;    
+    bool isFleeing = false;
+    Rigidbody rb; 
 
     // Start is called before the first frame update
     void Start()
     {
+        player = GameObject.Find("Player");        
         rb = GetComponent<Rigidbody>();
-        player = GameObject.Find("Player");
-        playerController = player.GetComponent<PlayerController>();
     }
 
     // Update is called once per frame
@@ -36,23 +32,23 @@ public class Enemy : Unit
         rb.AddForce(transform.forward * movementSpeed, ForceMode.Acceleration);        
     }
 
-    private void OnCollisionEnter(Collision collision)
+    void OnCollisionEnter(Collision collision)
     {
         // Handle player collision
         if (collision.gameObject.CompareTag("Player"))
         {
             isFleeing = true;
-            playerController.gold -= 1;
+            GameManager.gold -= 1;
             rb.velocity = Vector3.zero;
             Collider col = GetComponent<Collider>();
             col.isTrigger = true;            
         }
     }
 
-    override public void Die()
+    public override void Die()
     {         
-        playerController.enemiesKilled += 1;
-        playerController.gold += 1;
+        GameManager.enemiesKilled += 1;        
+        GameManager.gold += 1;
         Destroy(gameObject);
     }
 }

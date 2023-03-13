@@ -7,18 +7,32 @@ public class GameUI : MonoBehaviour
 {
     public TextMeshProUGUI enemiesKilledText;
     public TextMeshProUGUI goldText;
-
-    private PlayerController playerController;
+    public TextMeshProUGUI waveNumberText;
+    public GameObject gameOver;
+    
     // Start is called before the first frame update
     void Start()
     {
-        playerController = GameObject.Find("Player").GetComponent<PlayerController>();
+        
     }
 
     // Update is called once per frame
     void Update()
     {
-        enemiesKilledText.text = "Enemies Killed: " + playerController.enemiesKilled;
-        goldText.text = "Gold: " + playerController.gold;
+        enemiesKilledText.text = "Enemies Killed: " + GameManager.enemiesKilled;
+        goldText.text = "Gold: " + GameManager.gold;
+        waveNumberText.text = "Wave Number: " + GameManager.waveNumber;
+        if (GameManager.isGameOver)
+        {
+            gameOver.SetActive(true);
+        }
+        else
+        {
+            gameOver.SetActive(false);
+        }
+    }
+    public void StartGame()
+    {
+        GameManager.StartGame();
     }
 }
