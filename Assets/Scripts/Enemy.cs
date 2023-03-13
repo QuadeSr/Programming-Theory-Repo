@@ -29,7 +29,7 @@ public class Enemy : Unit
         {
             transform.RotateAround(transform.position, transform.up, 180f);            
         } 
-        rb.AddForce(transform.forward * movementSpeed, ForceMode.Acceleration);        
+        rb.AddForce(transform.forward * movementSpeed * Time.deltaTime, ForceMode.Acceleration);        
     }
 
     void OnCollisionEnter(Collision collision)

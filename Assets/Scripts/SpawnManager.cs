@@ -40,11 +40,13 @@ public class SpawnManager : MonoBehaviour
 
     void SpawnWave()
     {
+        // Pick a random corner
+        Vector3 randomCorner = new Vector3(Random.Range(0, 2) * spawnBufferSize * 2 - spawnBufferSize, 0, Random.Range(0, 2) * spawnBufferSize * 2 - spawnBufferSize);
+
         GameManager.waveNumber++;
         for (int i = 0; i < GameManager.waveNumber; i++)
-        {
-            Vector3 randomCorner = new Vector3(Random.Range(0, 2) * spawnBufferSize * 2 - spawnBufferSize, 0, Random.Range(0, 2) * spawnBufferSize * 2 - spawnBufferSize);
-            Vector3 spawnPos = new Vector3(Random.Range(0f, 3.0f), 0.5f, Random.Range(0f, 3.0f));
+        {            
+            Vector3 spawnPos = new Vector3(Random.Range(0f, 5.0f), 0.5f, Random.Range(0f, 5.0f));
             SpawnMonster(randomCorner + spawnPos);
         }        
     }
