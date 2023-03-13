@@ -39,7 +39,7 @@ public class Weapon : Unit
             worldPos.y = transform.position.y;
             transform.LookAt(worldPos);
             rb = GetComponent<Rigidbody>();
-            // Fire weapon towards mouse
+            // Fire weapon towards mouse position
             rb.AddForce(transform.forward * movementSpeed, ForceMode.Impulse);
         }
     }
