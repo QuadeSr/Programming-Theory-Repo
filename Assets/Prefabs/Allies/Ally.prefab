@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 1898331834388092278}
   - component: {fileID: 1898331834388092279}
   - component: {fileID: 6695546259480002830}
+  - component: {fileID: 9170970942436310890}
   m_Layer: 0
   m_Name: Ally
   m_TagString: Ally
@@ -64,7 +65,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 27962deae0a90994fa4a686dcef46e41, type: 2}
+  - {fileID: 2100000, guid: b976a33c1e9621c4eb8fc4c810179088, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -130,8 +131,22 @@ MonoBehaviour:
   hp: 10
   movementSpeed: 2000
   player: {fileID: 0}
+  despawnDistance: 50
   damage: 1
-  knockback: 100
+  knockback: 30
   hitCooldown: 0
-  gatherCooldown: 1
-  gatherCooldownTimer: 0
+  range: 20
+  minRange: 0.25
+--- !u!135 &9170970942436310890
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1898331834388092277}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 1
+  m_Center: {x: 0, y: 0, z: 0}

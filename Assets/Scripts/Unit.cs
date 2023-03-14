@@ -8,7 +8,7 @@ public class Unit : MonoBehaviour
     public float movementSpeed;
     public GameObject player;
 
-    float despawnDistance = 20.0f;
+    public float despawnDistance = 20.0f;
 
     // Start is called before the first frame update
     void Start()
@@ -34,7 +34,7 @@ public class Unit : MonoBehaviour
         {
             Die();
         }
-        if (transform.position.magnitude - player.transform.position.magnitude > despawnDistance)
+        if (Vector3.Distance(transform.position, player.transform.position) > despawnDistance)
         {
             Despawn();
         }

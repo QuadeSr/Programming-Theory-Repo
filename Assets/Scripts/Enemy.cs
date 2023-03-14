@@ -5,6 +5,10 @@ using UnityEngine;
 // INHERITENCE
 public class Enemy : Unit
 {
+    public float attackCooldown = 0.5f;
+    public GameObject[] loot;
+
+    float attackCooldownTimer = 0;
     bool isFleeing = false;
     Rigidbody rb; 
 
@@ -19,8 +23,21 @@ public class Enemy : Unit
     void Update()
     {
         CheckIfDead();
-        HandleMovement();
+        if (!GameManager.isPaused)
+        {
+            HandleMovement();
+            HandleTimers();
+        }
+    }    
+
+    void HandleTimers()
+    {
+        if (attackCooldownTimer > 0)
+        {
+            attackCooldownTimer -= Time.deltaTime;
+        }
     }
+
     void HandleMovement()
     {
         // Move in direction of player if not fleeing
@@ -29,28 +46,52 @@ public class Enemy : Unit
         {
             transform.RotateAround(transform.position, transform.up, 180f);            
         } 
-        rb.AddForce(transform.forward * movementSpeed * Time.deltaTime, ForceMode.Acceleration);        
+        rb.AddForce(transform.forward * movementSpeed * Time.deltaTime, ForceMode.Acceleration);
+
+        // Move by speed
+        transform.position -= Vector3.forward * Time.deltaTime * GameManager.speed;
     }
 
     void OnCollisionEnter(Collision collision)
     {
+        CheckPlayerCollision(collision);
+    }
+
+    private void OnCollisionStay(Collision collision)
+    {
+        CheckPlayerCollision(collision);
+    }
+
+    void CheckPlayerCollision(Collision collision)
+    {
         // Handle player collision
         if (collision.gameObject.CompareTag("Player"))
         {
-            Renderer renderer = GetComponent<Renderer>();
-            renderer.material.SetColor("_Color", Color.white);
-            isFleeing = true;
-            GameManager.gold -= 1;
-            rb.velocity = Vector3.zero;
-            Collider col = GetComponent<Collider>();
-            col.isTrigger = true;            
+            // Steal coin and flee if player has any
+            if (GameManager.coin > 0)
+            {
+                Renderer renderer = GetComponent<Renderer>();
+                renderer.material.SetColor("_Color", Color.white);
+                isFleeing = true;
+                GameManager.coin -= 1;
+                rb.velocity = Vector3.zero;
+                Collider col = GetComponent<Collider>();
+                col.isTrigger = true;
+            }
+            // Hit player and reset attackCooldownTimer
+            else if (attackCooldownTimer <= 0)
+            {
+                GameManager.hp--;
+                attackCooldownTimer = attackCooldown;
+            }
         }
     }
 
     public override void Die()
     {         
-        GameManager.enemiesKilled += 1;        
-        GameManager.gold += 1;
+        GameManager.enemiesKilled += 1;
+        // TODO: Add coin drops
+        Instantiate(loot[0], transform.position, loot[0].transform.rotation);
         Destroy(gameObject);
     }
 }

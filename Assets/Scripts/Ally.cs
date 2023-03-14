@@ -1,24 +1,28 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class Ally : Unit
 {
     public float damage;
-    public float knockback;
+    public float knockback;    
+
     public float hitCooldown;
     private float hitCooldownTimer = 0;
-    public float gatherCooldown;
-    public float gatherCooldownTimer;
+
+    public float range = 15.0f;
+    public float minRange = 0.25f;
+
     Rigidbody rb;
     Vector3 target;
+    GameObject resourceTargeted;    
 
     // Start is called before the first frame update
     void Start()
     {
         player = GameObject.Find("Player");
-        rb = GetComponent<Rigidbody>();
-        gatherCooldownTimer = gatherCooldown;
+        rb = GetComponent<Rigidbody>();        
         GetTarget();
     }
 
@@ -26,17 +30,39 @@ public class Ally : Unit
     void Update()
     {
         HandleMovement();
-        HandleTimers();
-    }
+        if (!GameManager.isPaused)
+        {            
+            HandleTimers();
+        }
+    }    
 
     void HandleMovement()
     {
-        if (Input.GetKeyDown(KeyCode.Mouse1) || Input.GetKey(KeyCode.Mouse1))
+        // Get a target when you left click
+        if (Input.GetKeyDown(KeyCode.Mouse0) || Input.GetKey(KeyCode.Mouse0))
         {
             GetTarget();
         }
-        transform.LookAt(target);
+
+        // If targeting a resource, target it again since its position changes over time
+        if (resourceTargeted != null)
+        {          
+            target = resourceTargeted.transform.position;
+            target.y = transform.position.y;
+        }
+
+        // If it's too far from player, drop target and target player       
+        if (Vector3.Distance(transform.position, player.transform.position) > range)
         {
+            resourceTargeted = null;
+            Debug.Log("Target Dropped");
+            target = player.transform.position + Vector3.forward * 2;
+        }
+
+        // If distance to target > minRange, look at target and apply movementSpeed acceleration towards it 
+        if (Vector3.Distance(transform.position, target) > minRange)
+        {
+            transform.LookAt(target);
             rb.AddForce(transform.forward * movementSpeed * Time.deltaTime, ForceMode.Acceleration);
         }
     }
@@ -46,26 +72,37 @@ public class Ally : Unit
         if (hitCooldownTimer > 0)
         {
             hitCooldownTimer -= Time.deltaTime;
-        }
-        if (gatherCooldownTimer < gatherCooldown)
-        {
-            gatherCooldownTimer += Time.deltaTime;
-        }
+        }        
     }
 
     void GetTarget()
     {
         // ENCAPSULATION        
         float distance;
-        Plane plane = new Plane(Vector3.up, 0);
+        Plane plane = new Plane(Vector3.up, 0);        
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
-        // Get the position of the mouse on the ground
+        // Get the position of the mouse on the ground and set it as target
         if (plane.Raycast(ray, out distance))
         {
             target = ray.GetPoint(distance);
-            target.y = transform.position.y;
+            target.y = transform.position.y;            
+            resourceTargeted = null;            
+            Debug.Log("Ground Targeted");            
         }
+
+        // If you click on a resource, set that as the target
+        RaycastHit raycastHit;
+        if (Physics.Raycast(ray, out raycastHit, 100f))
+        {
+            if (raycastHit.transform.gameObject.CompareTag("Resource") || raycastHit.transform.gameObject.CompareTag("Enemy"))
+            {
+                target = raycastHit.transform.position;
+                target.y = transform.position.y;
+                resourceTargeted = raycastHit.transform.gameObject;                
+                Debug.Log("Resource Targeted");
+            }
+        }           
     }
 
     void OnTriggerEnter(Collider other)
@@ -76,23 +113,19 @@ public class Ally : Unit
     {
         TestEnemyHit(collision.collider);
     }
-
-    private void OnCollisionStay(Collision collision)
+    
+    void OnTriggerStay(Collider other)
     {
-        TestGatherHit(collision.collider);
+        TestGatherHit(other);
     }
 
     void TestGatherHit(Collider other)
     {
         if (other.CompareTag("Resource"))
         {
-            gatherCooldownTimer -= Time.deltaTime * 2;
-            if (gatherCooldownTimer <= 0)
-            {
-                Debug.Log("Resourse Gathered");
-                GameManager.wood += 1;
-                gatherCooldownTimer = gatherCooldown;
-            }
+            Resource resource = other.gameObject.GetComponent<Resource>();
+            Debug.Log("Gathering resource: " + resource.type);
+            resource.Gather();
         }
     }
 

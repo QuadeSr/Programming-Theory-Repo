@@ -19,20 +19,37 @@ public class PlayerController : MonoBehaviour
 
     // Update is called once per frame
     void Update()
-    {
-        CheckIfDead();
-        HandleInput();
-        FireWeapon();
+    {        
+        if (!GameManager.isPaused)
+        {
+            CheckIfDead();
+            HandleInput();
+            FireWeapon();
+        }
     }
 
     private void HandleInput()
     {  
-        // Handle right mouse click
-        if (Input.GetKeyDown(KeyCode.Mouse1))
+        // Handle left mouse click
+        if (Input.GetKeyDown(KeyCode.Mouse0))
         {
             SpawnAlly();
         }
+
+        // Handle scroll wheel
+        GameManager.speed += GetScroll();
+        if (GameManager.speed < 0)
+        {
+            GameManager.speed = 0;
+        }
     }
+
+    public float GetScroll()
+    {
+        float scroll = Input.mouseScrollDelta.y;
+        return scroll;
+    }
+
     void SpawnAlly()
     {
         // Spawn ally prefab at player's location
@@ -59,7 +76,7 @@ public class PlayerController : MonoBehaviour
 
     private void CheckIfDead()
     {
-        if (GameManager.gold <= 0)
+        if (GameManager.hp <= 0)
         {
             GameManager.isGameOver = true;
         }
