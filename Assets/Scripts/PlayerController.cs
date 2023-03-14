@@ -9,7 +9,7 @@ public class PlayerController : MonoBehaviour
     public GameObject allyPrefab;
 
     public float weaponCooldown = 0.5f;
-    public float weaponCooldownTimer = 0.0f;
+    private float weaponCooldownTimer = 0.0f;
     
     // Start is called before the first frame update
     void Start()
@@ -21,25 +21,12 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         CheckIfDead();
-        HandleInput();        
+        HandleInput();
+        FireWeapon();
     }
 
     private void HandleInput()
-    {
-        // Handle weaponCooldown
-        if (weaponCooldownTimer > 0)
-        {
-            weaponCooldownTimer -= Time.deltaTime;
-        }
-        else
-        {
-            // Handle left mouse click
-            if (Input.GetKeyDown(KeyCode.Mouse0))
-            {
-                FireWeapon();
-            }
-        }
-
+    {  
         // Handle right mouse click
         if (Input.GetKeyDown(KeyCode.Mouse1))
         {
@@ -51,16 +38,24 @@ public class PlayerController : MonoBehaviour
         // Spawn ally prefab at player's location
         if (GameObject.FindGameObjectsWithTag("Ally").Length < 1)
         {
-            Instantiate(allyPrefab, transform.position + Vector3.forward, allyPrefab.transform.rotation);
+            Instantiate(allyPrefab, transform.position + Vector3.forward * 2, allyPrefab.transform.rotation);
         }
     }
     
     private void FireWeapon()
+{
+    // Handle weaponCooldown
+    if (weaponCooldownTimer > 0)
+    {
+        weaponCooldownTimer -= Time.deltaTime;
+    }
+    else
     {
         // Spawn weapon prefab at player's location
         Instantiate(weaponPrefab, transform.position, weaponPrefab.transform.rotation);
         weaponCooldownTimer = weaponCooldown;
     }
+}
 
     private void CheckIfDead()
     {

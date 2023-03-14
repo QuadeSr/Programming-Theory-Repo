@@ -7,7 +7,8 @@ public class GameUI : MonoBehaviour
 {
     public TextMeshProUGUI enemiesKilledText;
     public TextMeshProUGUI goldText;
-    public TextMeshProUGUI waveNumberText;
+    public TextMeshProUGUI woodText;
+    public TextMeshProUGUI waveNumberText;    
     public GameObject gameOver;
     
     // Start is called before the first frame update
@@ -21,6 +22,7 @@ public class GameUI : MonoBehaviour
     {
         enemiesKilledText.text = "Enemies Killed: " + GameManager.enemiesKilled;
         goldText.text = "Gold: " + GameManager.gold;
+        woodText.text = "Wood: " + GameManager.wood;
         waveNumberText.text = "Wave Number: " + GameManager.waveNumber;
         if (GameManager.isGameOver)
         {

@@ -37,6 +37,8 @@ public class Enemy : Unit
         // Handle player collision
         if (collision.gameObject.CompareTag("Player"))
         {
+            Renderer renderer = GetComponent<Renderer>();
+            renderer.material.SetColor("_Color", Color.white);
             isFleeing = true;
             GameManager.gold -= 1;
             rb.velocity = Vector3.zero;

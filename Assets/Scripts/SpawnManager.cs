@@ -53,6 +53,7 @@ public class SpawnManager : MonoBehaviour
 
     void SpawnMonster(Vector3 pos)
     {
-        Instantiate(enemyPrefab[0], pos, enemyPrefab[0].transform.rotation);
+        GameObject monster = Instantiate(enemyPrefab[0], pos, enemyPrefab[0].transform.rotation);
+        monster.transform.SetParent(GameObject.Find("Ground").transform);
     }
 }

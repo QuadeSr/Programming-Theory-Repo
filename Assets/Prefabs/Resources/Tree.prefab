@@ -13,10 +13,9 @@ GameObject:
   - component: {fileID: 1898331834388092273}
   - component: {fileID: 1898331834388092278}
   - component: {fileID: 1898331834388092279}
-  - component: {fileID: 6695546259480002830}
   m_Layer: 0
-  m_Name: Ally
-  m_TagString: Ally
+  m_Name: Tree
+  m_TagString: Resource
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -64,7 +63,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 27962deae0a90994fa4a686dcef46e41, type: 2}
+  - {fileID: 2100000, guid: 0bb578257770a45418407303f5728e57, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -113,25 +112,5 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 4
+  m_Constraints: 14
   m_CollisionDetection: 0
---- !u!114 &6695546259480002830
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1898331834388092277}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a218603c54cfb8a428606c978d27bc01, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  hp: 10
-  movementSpeed: 2000
-  player: {fileID: 0}
-  damage: 1
-  knockback: 100
-  hitCooldown: 0
-  gatherCooldown: 1
-  gatherCooldownTimer: 0

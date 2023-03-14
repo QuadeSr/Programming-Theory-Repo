@@ -11,6 +11,8 @@ public class GameManager : MonoBehaviour
     public static int waveNumber = 0;
     public static float gold = 5;
     public static float startingGold = 5;
+    public static float wood = 0;
+    public static float startingWood = 0;
         
     private void Awake()
     {
@@ -39,7 +41,8 @@ public class GameManager : MonoBehaviour
         isGameOver = false;
         enemiesKilled = 0;
         waveNumber = 0;
-        gold = startingGold;       
+        gold = startingGold;
+        wood = startingWood;
         SceneManager.LoadScene(1);        
     }    
 }
